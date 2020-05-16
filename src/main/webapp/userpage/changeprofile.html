@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HouseOfTheCoder</title>
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport' />
+
+    <!-- my start -->
+    <link rel="stylesheet" href="/houseofthecoder/editormd/css/editormd.css" />
+
+    <script src="/houseofthecoder/editormd/examples/js/jquery.min.js"></script>
+    <script src="/houseofthecoder/editormd/editormd.js"></script>
+    <script type="text/javascript">
+
+        $(function() {
+
+            $.post("../getLoginOrNot",{},function (data) {
+                if(data.accountId!=null){
+                    $("#userimg1").attr("src","../img/usericon/"+data.userImg);
+                    $("#userimg").attr("src","../img/usericon/"+data.userImg);
+                    $("#username1").html(data.username);
+                }else{
+                    $("#iflogin").empty();
+                    var loginchoice = "<a href='sign_in.html' style='display: inline-block;margin-top: 10px;color: white'>未登录，请登录</a>";
+                    $("#iflogin").append(loginchoice);
+                }
+            });
+
+            $(function(){
+                var username=$("#usernamelabel");
+                var birthday=$("#birthdaylabel");
+                var sex=$("#sexlabel");
+                var intro=$("#introlabel");
+
+                $.post("viewPersonalInfo",{},function(data){
+                    username.html(data.username);
+                    birthday.html(data.birthday);
+                    if(data.sex=="男"){
+                        sex.html("男");
+                    }else{
+                        sex.html("女");
+                    }
+                    intro.html(data.intro);
+                });
+            });
+
+            $("#manage").click(function () {
+                var divName = "<label class='control-label'>昵称：</label><div class='controls'>" +
+                    "               <input class='span12' name=\"username\" id=\"username\" value=\"\" placeholder=\"用户昵称\" type='text' />" +
+                    "          </div>";
+                var divBirthday = "<label class='control-label'>出生日期：</label><div class='controls'>" +
+                    "                <input type=\"text\" class='autosize span12' name=\"birthday\" id=\"birthday\" placeholder=\"格式：1999-1-1\" value=\"\"/>" +
+                    "              </div>";
+                var divSex = "<label class='control-label'>性别：</label><div class='controls'>" +
+                    "            <input id='female' name=\"sex\"  type=\"radio\" value=\"女\" checked />女" +
+                    "                 &nbsp;&nbsp;&nbsp;&nbsp;" +
+                    "            <input id='male' name=\"sex\" type=\"radio\" value=\"男\" />男" +
+                    "         </div>";
+                var divIntro = "<label class='control-label'>简介：</label><div class='controls'>" +
+                    "             <textarea class='autosize span12' id='intro' name=\"intro\" placeholder=\"个人简介\"></textarea>" +
+                    "           </div>";
+                var usernameblock = $("#usernameblock");
+                var birthdayblock = $("#birthdayblock");
+                var sexblock = $("#sexblock");
+                var introblock = $("#introblock");
+                usernameblock.empty();
+                birthdayblock.empty();
+                sexblock.empty();
+                introblock.empty();
+                usernameblock.append(divName);
+                birthdayblock.append(divBirthday);
+                sexblock.append(divSex);
+                introblock.append(divIntro);
+                $.post("viewPersonalInfo",{},function (data) {
+                    var username = $("#username");
+                    var birthday = $("#birthday");
+                    var female = $("#female");
+                    var male = $("#male");
+                    var intro = $("#intro");
+
+                    username.val(data.username);
+                    birthday.val(data.birthday);
+                    intro.val(data.intro);
+
+                    if(data.sex=="男"){
+                        male.prop("checked",true);
+                    }else{
+                        female.prop("checked",true);
+                    }
+                    $("#change").prop("disabled",false);
+                });
+            });
+
+            var msg = getParam("msg");
+            if(msg=="chginf"){
+                alert("修改个人信息成功");
+            }else if(msg=="chgimg"){
+                alert("修改头像成功");
+            }else if(msg=="chgpwd"){
+                alert("修改密码成功");
+            }
+        });
+
+        function getParam(name) {
+            var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if(r!=null){
+                return unescape(r[2]);
+            }
+            return null;
+        }
+    </script>
+    <!-- my end -->
+
+    <!--[if lt IE 9]>
+    <script src='../assets/javascripts/html5shiv.js' type='text/javascript'></script>
+    <![endif]-->
+    <link href='../assets/stylesheets/bootstrap/bootstrap.css' media='all' rel='stylesheet' type='text/css' />
+    <link href='../assets/stylesheets/bootstrap/bootstrap-responsive.css' media='all' rel='stylesheet' type='text/css' />
+    <!-- / jquery ui -->
+    <link href='../assets/stylesheets/jquery_ui/jquery-ui-1.10.0.custom.css' media='all' rel='stylesheet' type='text/css' />
+    <link href='../assets/stylesheets/jquery_ui/jquery.ui.1.10.0.ie.css' media='all' rel='stylesheet' type='text/css' />
+    <!-- / switch buttons -->
+    <link href='../assets/stylesheets/plugins/bootstrap_switch/bootstrap-switch.css' media='all' rel='stylesheet' type='text/css' />
+    <!-- / xeditable -->
+    <link href='../assets/stylesheets/plugins/xeditable/bootstrap-editable.css' media='all' rel='stylesheet' type='text/css' />
+    <link href='../assets/stylesheets/plugins/common/bootstrap-wysihtml5.css' media='all' rel='stylesheet' type='text/css' />
+    <!-- / wysihtml5 (wysywig) -->
+    <link href='../assets/stylesheets/plugins/common/bootstrap-wysihtml5.css' media='all' rel='stylesheet' type='text/css' />
+    <!-- / jquery file upload -->
+    <link href='../assets/stylesheets/plugins/jquery_fileupload/jquery.fileupload-ui.css' media='all' rel='stylesheet' type='text/css' />
+    <!-- / full calendar -->
+    <link href='../assets/stylesheets/plugins/fullcalendar/fullcalendar.css' media='all' rel='stylesheet' type='text/css' />
+    <!-- / select2 -->
+    <link href='../assets/stylesheets/plugins/select2/select2.css' media='all' rel='stylesheet' type='text/css' />
+    <!-- / mention -->
+    <link href='../assets/stylesheets/plugins/mention/mention.css' media='all' rel='stylesheet' type='text/css' />
+    <!-- / tabdrop (responsive tabs) -->
+    <link href='../assets/stylesheets/plugins/tabdrop/tabdrop.css' media='all' rel='stylesheet' type='text/css' />
+    <!-- / jgrowl notifications -->
+    <link href='../assets/stylesheets/plugins/jgrowl/jquery.jgrowl.min.css' media='all' rel='stylesheet' type='text/css' />
+    <!-- / datatables -->
+    <link href='../assets/stylesheets/plugins/datatables/bootstrap-datatable.css' media='all' rel='stylesheet' type='text/css' />
+    <!-- / dynatrees (file trees) -->
+    <link href='../assets/stylesheets/plugins/dynatree/ui.dynatree.css' media='all' rel='stylesheet' type='text/css' />
+    <!-- / color picker -->
+    <link href='../assets/stylesheets/plugins/bootstrap_colorpicker/bootstrap-colorpicker.css' media='all' rel='stylesheet' type='text/css' />
+    <!-- / datetime picker -->
+    <link href='../assets/stylesheets/plugins/bootstrap_datetimepicker/bootstrap-datetimepicker.min.css' media='all' rel='stylesheet' type='text/css' />
+    <!-- / daterange picker) -->
+    <link href='../assets/stylesheets/plugins/bootstrap_daterangepicker/bootstrap-daterangepicker.css' media='all' rel='stylesheet' type='text/css' />
+    <!-- / flags (country flags) -->
+    <link href='../assets/stylesheets/plugins/flags/flags.css' media='all' rel='stylesheet' type='text/css' />
+    <!-- / slider nav (address book) -->
+    <link href='../assets/stylesheets/plugins/slider_nav/slidernav.css' media='all' rel='stylesheet' type='text/css' />
+    <!-- / fuelux (wizard) -->
+    <link href='../assets/stylesheets/plugins/fuelux/wizard.css' media='all' rel='stylesheet' type='text/css' />
+    <!-- / flatty theme -->
+    <link href='../assets/stylesheets/light-theme.css' id='color-settings-body-color' media='all' rel='stylesheet' type='text/css' />
+    <!-- / demo -->
+    <link href='../assets/stylesheets/demo.css' media='all' rel='stylesheet' type='text/css' />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>
+<body class='contrast-fb '>
+<header>
+    <div class='navbar'>
+        <div class='navbar-inner'>
+            <div class='container-fluid'>
+                <a class='brand' href='index.html'>
+                    <img src="../img/icon.gif" style="margin-bottom: 5px">
+                    <span class='hidden-phone'>HouseOfTheCoder</span>
+                </a>
+                <a class='toggle-nav btn pull-left' href='#'>
+                    <i class='icon-reorder'></i>
+                </a>
+                <a href="postarticle.html" style='display: inline-block;margin-top: 10px;color: white'>写文章</a>
+                <ul class='nav pull-right' id="iflogin">
+                    <li class='dropdown light only-icon'>
+
+
+                    </li>
+                    <li class='dropdown medium only-icon widget'>
+
+                    </li>
+
+
+                    <li class='dropdown dark user-menu'>
+                        <a class='dropdown-toggle' data-toggle='dropdown' href='#'>
+                            <img id="userimg1" height='23' src='' width='23' />
+                            <span id="username1" class='user-name hidden-phone'>Andrew Shaw</span>
+                            <b class='caret'></b>
+                        </a>
+                        <ul class='dropdown-menu'>
+                            <li>
+                                <a href='ownuserpage.html?page=0'>
+                                    <i class='icon-circle-blank'></i>
+                                    MyPage
+                                </a>
+                            </li>
+                            <li class='divider'></li>
+                            <li>
+                                <a href='changeprofile.html'>
+                                    <i class='icon-user'></i>
+                                    Profile
+                                </a>
+                            </li>
+                            <li class='divider'></li>
+                            <li>
+                                <a href='../signout'>
+                                    <i class='icon-signout'></i>
+                                    Sign out
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                </ul>
+                <form accept-charset="UTF-8" action="search_results.html" class="navbar-search pull-right hidden-phone" method="get" /><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /></div>
+                    <button class="btn btn-link icon-search" name="button" type="submit"></button>
+                    <input autocomplete="off" class="search-query span2" id="q_header" name="q" placeholder="Search..." type="text" value="" />
+                </form>
+            </div>
+        </div>
+    </div>
+</header>
+<div id='wrapper'>
+<div id='main-nav-bg'></div>
+    <nav class='' id='main-nav'>
+        <div class='navigation'>
+            <div class='search'>
+                <form accept-charset="UTF-8" action="search_results.html" method="get" /><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /></div>
+                <div class='search-wrapper'>
+                    <input autocomplete="off" class="search-query" id="q" name="q" placeholder="Search..." type="text" value="" />
+                    <button class="btn btn-link icon-search" name="button" type="submit"></button>
+                </div>
+                </form>
+            </div>
+            <ul class='nav nav-stacked'>
+                <li class=''>
+                    <a href='index.html'>
+                        <i class='icon-dashboard'></i>
+                        <span>公告</span>
+                    </a>
+                </li>
+                <li class=''>
+                    <a href='../main.html?page=0'>
+                        <i class='icon-star'></i>
+                        <span>推荐</span>
+                    </a>
+                </li>
+                <li class=''>
+                    <a href='mainfollow.html?page=0'>
+                        <i class='icon-list-ul'></i>
+                        <span>关注</span>
+                    </a>
+                </li>
+                <li>
+                    <a class='dropdown-collapse ' href='#'>
+                        <i class='icon-book'></i>
+                        <span>前端技术</span>
+                        <i class='icon-angle-down angle-down'></i>
+                    </a>
+                    <ul class='nav nav-stacked' style="display: block">
+                        <li class=''>
+                            <a href='../mainsort.html?page=0&&sortid=1'>
+                                <i class='icon-bar-chart'></i>
+                                <span>HTML5</span>
+                            </a>
+                        </li>
+                        <li class=''>
+                            <a href='../mainsort.html?page=0&&sortid=2'>
+                                <i class='icon-pencil'></i>
+                                <span>JavaScript</span>
+                            </a>
+                        </li>
+                        <li class=''>
+                            <a href='../mainsort.html?page=0&&sortid=3'>
+                                <i class='icon-tint'></i>
+                                <span>Vue.js</span>
+                            </a>
+                        </li>
+                        <li class=''>
+                            <a href='../mainsort.html?page=0&&sortid=10'>
+                                <i class='icon-circle-blank'></i>
+                                <span>其他</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a class='dropdown-collapse ' href='#'>
+                        <i class='icon-cogs'></i>
+                        <span>后端技术</span>
+                        <i class='icon-angle-down angle-down'></i>
+                    </a>
+                    <ul class='nav nav-stacked' style="display: block">
+                        <li class=''>
+                            <a href='../mainsort.html?page=0&&sortid=4'>
+                                <i class='icon-bar-chart'></i>
+                                <span>Java</span>
+                            </a>
+                        </li>
+                        <li class=''>
+                            <a href='../mainsort.html?page=0&&sortid=5'>
+                                <i class='icon-pencil'></i>
+                                <span>Python</span>
+                            </a>
+                        </li>
+                        <li class=''>
+                            <a href='../mainsort.html?page=0&&sortid=6'>
+                                <i class='icon-tint'></i>
+                                <span>C++</span>
+                            </a>
+                        </li>
+                        <li class=''>
+                            <a href='../mainsort.html?page=0&&sortid=11'>
+                                <i class='icon-circle-blank'></i>
+                                <span>其他</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a class='dropdown-collapse ' href='#'>
+                        <i class='icon-table'></i>
+                        <span>数据库技术</span>
+                        <i class='icon-angle-down angle-down'></i>
+                    </a>
+                    <ul class='nav nav-stacked' style="display: block">
+                        <li class=''>
+                            <a href='../mainsort.html?page=0&&sortid=7'>
+                                <i class='icon-bar-chart'></i>
+                                <span>MySQL</span>
+                            </a>
+                        </li>
+                        <li class=''>
+                            <a href='../mainsort.html?page=0&&sortid=8'>
+                                <i class='icon-pencil'></i>
+                                <span>Oracle</span>
+                            </a>
+                        </li>
+                        <li class=''>
+                            <a href='../mainsort.html?page=0&&sortid=9'>
+                                <i class='icon-tint'></i>
+                                <span>SQLServer</span>
+                            </a>
+                        </li>
+                        <li class=''>
+                            <a href='../mainsort.html?page=0&&sortid=12'>
+                                <i class='icon-circle-blank'></i>
+                                <span>其他</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>
+        </div>
+    </nav>
+<section id='content'>
+    <div class='container-fluid'>
+        <div class='row-fluid' id='content-wrapper'>
+            <div class='span12'>
+                <div class='page-header'>
+                    <h1 class='pull-left'>
+                        <i class='icon-user'></i>
+                        <span>用户配置</span>
+                    </h1>
+                    <div class='pull-right'>
+                        <ul class='breadcrumb'>
+                            <li>
+                                <a href="index.html"><i class='icon-bar-chart'></i>
+                                </a>
+                            </li>
+
+                            <li class='separator'>
+                                <i class='icon-angle-right'></i>
+                            </li>
+                            <li class='active'>User profile</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class='row-fluid'>
+                    <div class='span3 box'>
+                        <div class='box-content'>
+                            <img alt="230x230&amp;"width="230px" height="230px" id="userimg" style="margin-left: 10px" src="" />
+
+                            <form action="changeImg" method="post" enctype="multipart/form-data" style="margin-top: 5px;margin-left: 10px">
+                                <br/>
+                                <input type="file" name="picture">
+                                <br/>
+                                <br/>
+                                <input type="submit" value="确认修改">
+                            </form>
+                        </div>
+                    </div>
+                    <div class='span9 box'>
+                        <div class='box-content box-double-padding'>
+                            <form id="form1" name="form1" action="changePassword" method="post" style='margin-bottom: 0;'>
+                                <fieldset>
+                                    <div class='span4'>
+                                        <div class='lead'>
+                                            <i class='icon-signin text-contrast'></i>
+                                            Login info
+                                        </div>
+                                        <small class='muted'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nisl est, vulputate at porttitor non, interdum a mauris. Phasellus imperdiet gravida pulvinar.</small>
+                                    </div>
+                                    <div class='span7 offset1'>
+                                        <div class='control-group'>
+                                            <label id="accountname" class='control-label'></label>
+                                        </div>
+                                        <hr class='hr-normal' />
+                                        <div class='control-group'>
+                                            <div class='controls'>
+                                                <label class='checkbox'>
+                                                    <input data-target='#change-password' data-toggle='collapse' id='changepasswordcheck' type='checkbox' />
+                                                    Change password?
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div class='collapse' id='change-password'>
+                                            <div class='control-group'>
+                                                <label class='control-label'>密码：</label>
+                                                <div class='controls'>
+                                                    <input class='span12' name="password" id='password' placeholder='请输入新密码' type='password' />
+                                                </div>
+                                            </div>
+                                            <div class='control-group'>
+                                                <label class='control-label'>确认密码：</label>
+                                                <div class='controls'>
+                                                    <input class='span12' id='password-confirmation' placeholder='再输入一次' type='password' />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <div class='form-actions' style='margin-bottom: 0;'>
+                                    <div class='text-right'>
+
+                                            <input id="submitBtn" type="submit" disabled value="提交修改"/>
+
+                                    </div>
+                                </div>
+                             </form>
+                                <hr class='hr-normal' />
+                             <form id="form2" name="form2" method="post" action="changePersonalInfo" style='margin-bottom: 0;'>
+                                <fieldset>
+                                    <div class='span4 box'>
+                                        <div class='lead'>
+                                            <i class='icon-user text-contrast'></i>
+                                            Personal info
+                                        </div>
+                                        <small class='muted'>Proin eu nibh ut urna tristique rhoncus. Sed euismod, quam sed dignissim imperdiet, nulla leo vehicula mi, a sagittis lacus augue nec sapien.</small>
+                                    </div>
+                                    <div class='span7 offset1'>
+                                        <div id="usernameblock" class='control-group'>
+                                            <label class='control-label'>昵称：</label>
+                                            <label id="usernamelabel" style="color: cornflowerblue"></label>
+
+                                        </div>
+                                        <div id="birthdayblock" class='control-group'>
+                                            <label class='control-label'>出生日期：</label>
+                                            <label id="birthdaylabel" style="color: cornflowerblue"></label>
+                                        </div>
+                                        <div id="sexblock" class='control-group'>
+                                            <label class='control-label'>性别：</label>
+                                            <label id="sexlabel" style="color: cornflowerblue"></label>
+                                        </div>
+                                        <div id="introblock" class='control-group'>
+                                            <label class='control-label'>简介：</label>
+                                            <label id="introlabel" style="color: cornflowerblue"></label>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <div class='form-actions' style='margin-bottom: 0;'>
+                                    <div class='text-right'>
+                                            <input type="button" id="manage" value="编辑" />
+                                            &nbsp;&nbsp;&nbsp;&nbsp;
+                                     		<input id="change" type="submit" disabled value="提交修改"/>
+                                    </div>
+                                </div>
+
+                          </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</div>
+<script src="../js/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	$("#password-confirmation").blur(function(){
+		var p1=$("#password").val();
+		var p2=$("#password-confirmation").val();
+		var submitBtn = $("#submitBtn");
+		if(p1!=""&&p1==p2){
+			submitBtn.prop("disabled",false);
+		}else{
+			submitBtn.prop("disabled",true);
+		}
+	});
+
+});
+</script>
+<!-- / jquery -->
+<script src='../assets/javascripts/jquery/jquery.min.js' type='text/javascript'></script>
+<!-- / jquery mobile events (for touch and slide) -->
+<script src='../assets/javascripts/plugins/mobile_events/jquery.mobile-events.min.js' type='text/javascript'></script>
+<!-- / jquery migrate (for compatibility with new jquery) -->
+<script src='../assets/javascripts/jquery/jquery-migrate.min.js' type='text/javascript'></script>
+<!-- / jquery ui -->
+<script src='../assets/javascripts/jquery_ui/jquery-ui.min.js' type='text/javascript'></script>
+<!-- / bootstrap -->
+<script src='../assets/javascripts/bootstrap/bootstrap.min.js' type='text/javascript'></script>
+<script src='../assets/javascripts/plugins/flot/excanvas.js' type='text/javascript'></script>
+<!-- / sparklines -->
+<script src='../assets/javascripts/plugins/sparklines/jquery.sparkline.min.js' type='text/javascript'></script>
+<!-- / flot charts -->
+<script src='../javascripts/plugins/flot/flot.min.js' type='text/javascript'></script>
+<script src='../assets/javascripts/plugins/flot/flot.resize.js' type='text/javascript'></script>
+<script src='../assets/javascripts/plugins/flot/flot.pie.js' type='text/javascript'></script>
+<!-- / bootstrap switch -->
+<script src='../assets/javascripts/plugins/bootstrap_switch/bootstrapSwitch.min.js' type='text/javascript'></script>
+<!-- / fullcalendar -->
+<script src='../assets/javascripts/plugins/fullcalendar/fullcalendar.min.js' type='text/javascript'></script>
+<!-- / datatables -->
+<script src='../assets/javascripts/plugins/datatables/jquery.dataTables.min.js' type='text/javascript'></script>
+<script src='../assets/javascripts/plugins/datatables/jquery.dataTables.columnFilter.js' type='text/javascript'></script>
+<!-- / wysihtml5 -->
+<script src='../assets/javascripts/plugins/common/wysihtml5.min.js' type='text/javascript'></script>
+<script src='../assets/javascripts/plugins/common/bootstrap-wysihtml5.js' type='text/javascript'></script>
+<!-- / select2 -->
+<script src='../assets/javascripts/plugins/select2/select2.js' type='text/javascript'></script>
+<!-- / color picker -->
+<script src='../assets/javascripts/plugins/bootstrap_colorpicker/bootstrap-colorpicker.min.js' type='text/javascript'></script>
+<!-- / mention -->
+<script src='../assets/javascripts/plugins/mention/mention.min.js' type='text/javascript'></script>
+<!-- / input mask -->
+<script src='../assets/javascripts/plugins/input_mask/bootstrap-inputmask.min.js' type='text/javascript'></script>
+<!-- / fileinput -->
+<script src='../assets/javascripts/plugins/fileinput/bootstrap-fileinput.js' type='text/javascript'></script>
+<!-- / modernizr -->
+<script src='../assets/javascripts/plugins/modernizr/modernizr.min.js' type='text/javascript'></script>
+<!-- / retina -->
+<script src='../assets/javascripts/plugins/retina/retina.js' type='text/javascript'></script>
+<!-- / fileupload -->
+<script src='../assets/javascripts/plugins/fileupload/tmpl.min.js' type='text/javascript'></script>
+<script src='../assets/javascripts/plugins/fileupload/load-image.min.js' type='text/javascript'></script>
+<script src='../assets/javascripts/plugins/fileupload/canvas-to-blob.min.js' type='text/javascript'></script>
+<script src='../assets/javascripts/plugins/fileupload/jquery.iframe-transport.min.js' type='text/javascript'></script>
+<script src='../assets/javascripts/plugins/fileupload/jquery.fileupload.min.js' type='text/javascript'></script>
+<script src='../assets/javascripts/plugins/fileupload/jquery.fileupload-fp.min.js' type='text/javascript'></script>
+<script src='../assets/javascripts/plugins/fileupload/jquery.fileupload-ui.min.js' type='text/javascript'></script>
+<script src='../assets/javascripts/plugins/fileupload/jquery.fileupload-init.js' type='text/javascript'></script>
+<!-- / timeago -->
+<script src='../assets/javascripts/plugins/timeago/jquery.timeago.js' type='text/javascript'></script>
+<!-- / slimscroll -->
+<script src='../assets/javascripts/plugins/slimscroll/jquery.slimscroll.min.js' type='text/javascript'></script>
+<!-- / autosize (for textareas) -->
+<script src='../assets/javascripts/plugins/autosize/jquery.autosize-min.js' type='text/javascript'></script>
+<!-- / charCount -->
+<script src='../assets/javascripts/plugins/charCount/charCount.js' type='text/javascript'></script>
+<!-- / validate -->
+<script src='../assets/javascripts/plugins/validate/jquery.validate.min.js' type='text/javascript'></script>
+<script src='../assets/javascripts/plugins/validate/additional-methods.js' type='text/javascript'></script>
+<!-- / naked password -->
+<script src='../assets/javascripts/plugins/naked_password/naked_password-0.2.4.min.js' type='text/javascript'></script>
+<!-- / nestable -->
+<script src='../assets/javascripts/plugins/nestable/jquery.nestable.js' type='text/javascript'></script>
+<!-- / tabdrop -->
+<script src='../assets/javascripts/plugins/tabdrop/bootstrap-tabdrop.js' type='text/javascript'></script>
+<!-- / jgrowl -->
+<script src='../assets/javascripts/plugins/jgrowl/jquery.jgrowl.min.js' type='text/javascript'></script>
+<!-- / bootbox -->
+<script src='../assets/javascripts/plugins/bootbox/bootbox.min.js' type='text/javascript'></script>
+<!-- / inplace editing -->
+<script src='../assets/javascripts/plugins/xeditable/bootstrap-editable.min.js' type='text/javascript'></script>
+<script src='../assets/javascripts/plugins/xeditable/wysihtml5.js' type='text/javascript'></script>
+<!-- / ckeditor -->
+<script src='../assets/javascripts/plugins/ckeditor/ckeditor.js' type='text/javascript'></script>
+<!-- / filetrees -->
+<script src='../assets/javascripts/plugins/dynatree/jquery.dynatree.min.js' type='text/javascript'></script>
+<!-- / datetime picker -->
+<script src='../assets/javascripts/plugins/bootstrap_datetimepicker/bootstrap-datetimepicker.js' type='text/javascript'></script>
+<!-- / daterange picker -->
+<script src='../assets/javascripts/plugins/bootstrap_daterangepicker/moment.min.js' type='text/javascript'></script>
+<script src='../assets/javascripts/plugins/bootstrap_daterangepicker/bootstrap-daterangepicker.js' type='text/javascript'></script>
+<!-- / max length -->
+<script src='../assets/javascripts/plugins/bootstrap_maxlength/bootstrap-maxlength.min.js' type='text/javascript'></script>
+<!-- / dropdown hover -->
+<script src='../assets/javascripts/plugins/bootstrap_hover_dropdown/twitter-bootstrap-hover-dropdown.min.js' type='text/javascript'></script>
+<!-- / slider nav (address book) -->
+<script src='../assets/javascripts/plugins/slider_nav/slidernav-min.js' type='text/javascript'></script>
+<!-- / fuelux -->
+<script src='../assets/javascripts/plugins/fuelux/wizard.js' type='text/javascript'></script>
+<!-- / flatty theme -->
+<script src='../assets/javascripts/nav.js' type='text/javascript'></script>
+<script src='../assets/javascripts/tables.js' type='text/javascript'></script>
+<script src='../assets/javascripts/theme.js' type='text/javascript'></script>
+<!-- / demo -->
+<script src='../assets/javascripts/demo/jquery.mockjax.js' type='text/javascript'></script>
+<script src='../assets/javascripts/demo/inplace_editing.js' type='text/javascript'></script>
+<script src='../assets/javascripts/demo/charts.js' type='text/javascript'></script>
+<script src='../assets/javascripts/demo/demo.js' type='text/javascript'></script>
+
+</body>
+</html>

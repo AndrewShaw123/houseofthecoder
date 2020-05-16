@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.andrew.mapper.commentmapper.CommentMapper">
+
+    <cache />
+
+    <resultMap id="showComment" type="Comment">
+        <result column="whocommentid" property="whoCommentId"/>
+        <result column="content" property="content"/>
+        <result column="commenttime" property="commentTime"/>
+        <result column="commentname" property="commentName"/>
+    </resultMap>
+
+    <resultMap id="myCommentMap" type="CommentDetail">
+
+        <result column="title" property="article.title"/>
+        <result column="articleid" property="article.articleId"/>
+        <result column="content" property="comment.content"/>
+        <result column="commentid" property="comment.commentId"/>
+        <result column="commenttime" property="comment.commentTime"/>
+    </resultMap>
+
+
+
+    <select id="getArticleCommentByArticleId" resultMap="showComment">
+        SELECT whocommentid,content,commenttime,commentname FROM comment WHERE articleid = #{articleId};
+    </select>
+
+    <insert id="insertComment" useGeneratedKeys="true">
+        INSERT INTO comment(`articleid`,`commentname`,`whocommentid`,`becommentid`,`commenttime`,`content`) VALUES (#{articleId}, #{commentName}, #{commentId}, #{beaccountId}, #{time}, #{content});
+    </insert>
+
+    <select id="querySumCommentByAccountId" resultType="int">
+        SELECT COUNT(*) FROM comment WHERE becommentid = #{accountId};
+    </select>
+
+    <select id="getAllMyComment" resultMap="myCommentMap">
+        SELECT title,article.articleid,comment.content,commenttime,commentid FROM `comment` join article on comment.articleid=article.articleid WHERE whocommentid=#{accountId};
+    </select>
+
+    <delete id="deleteCommentByCommentId">
+        DELETE FROM comment WHERE commentid=#{commentId};
+    </delete>
+
+
+</mapper>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.andrew.mapper.starmapper.StarMapper">
+
+    <cache />
+    
+    <resultMap id="whoStarArticleMap" type="SimpleArticle">
+        <result column="articleid" property="articleId"/>
+        <result column="title" property="title"/>
+    </resultMap>
+
+    <select id="queryStarExistByArticleIdAndAccountId" resultType="int">
+        SELECT COUNT(*) FROM `star` WHERE bestararticleid=#{articleId} and whostarid=#{accountId};
+    </select>
+
+    <insert id="insertStar" useGeneratedKeys="true">
+        INSERT INTO star(`bestararticleid`,`whostarid`) VALUES (#{articleId},#{accountId});
+    </insert>
+
+    <select id="getAllStarByWhoStarId" resultMap="whoStarArticleMap">
+        SELECT articleid,title FROM star JOIN article ON bestararticleid=articleid WHERE whostarid=#{whoStarId};
+    </select>
+
+    <delete id="deleteStarByBeStarArticleIdAndWhoStarId">
+        DELETE FROM star WHERE bestararticleid=#{articleId} and whostarid=#{accountId};
+    </delete>
+
+
+
+</mapper>

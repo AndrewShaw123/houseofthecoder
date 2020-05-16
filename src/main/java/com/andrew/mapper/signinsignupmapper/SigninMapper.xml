@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.andrew.mapper.signinsignupmapper.SigninMapper">
+
+    <cache />
+    
+    <resultMap id="basicSessionInfo" type="SessionUser">
+        <result column="accountid" property="accountId" />
+        <result column="username" property="username" />
+        <result column="userimg" property="userImg" />
+    </resultMap>
+    
+    <resultMap id="accountMap" type="Account">
+        <result column="accountid" property="id" />
+        <result column="accountname" property="accountName" />
+        <result column="password" property="password" />
+    </resultMap>
+
+    <select id="selectByUsername" resultMap="accountMap">
+        SELECT accountid,accountname,password FROM account WHERE accountname=#{username};
+    </select>
+
+    <select id="selectRoleByAccountid" resultType="string">
+        SELECT rolename FROM role WHERE accountid = #{accountid};
+    </select>
+
+    <select id="selectBasicSessionInfo" resultMap="basicSessionInfo">
+        SELECT accountid,username,userimg FROM user WHERE accountid = #{acccountid};
+</select>
+
+    <insert id="insertUserLoginLog" useGeneratedKeys="true">
+        INSERT INTO loginlog(`accountid`,`logintime`,`loginaddr`) VALUES (#{loginLog.accountId},#{loginLog.loginTime},#{loginLog.loginAddr});
+    </insert>
+
+
+</mapper>

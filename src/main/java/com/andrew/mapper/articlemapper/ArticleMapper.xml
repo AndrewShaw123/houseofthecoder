@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.andrew.mapper.articlemapper.ArticleMapper">
+
+    <cache />
+
+    <resultMap id="articleMap" type="Article">
+        <result column="articleid" property="articleId"/>
+        <result column="accountid" property="accountId"/>
+        <result column="sortid" property="sortId"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="viewcount" property="viewCount"/>
+        <result column="likecount" property="likeCount"/>
+        <result column="hatecount" property="hateCount"/>
+        <result column="uploadtime" property="uploadTime"/>
+    </resultMap>
+    
+    <resultMap id="userMap" type="User">
+        <result column="accountid" property="accountId"/>
+        <result column="username" property="username"/>
+        <result column="userimg" property="userImg"/>
+    </resultMap>
+
+    <insert id="saveNewArticle" useGeneratedKeys="true">
+        INSERT INTO article(`accountid`,`sortid`,`uploadtime`,`content`,`viewcount`,`likecount`,`hatecount`,`title`) VALUES (#{article.accountId},#{article.sortId},#{article.uploadTime},#{article.content},#{article.viewCount},#{article.likeCount},#{article.hateCount},#{article.title});
+    </insert>
+
+    <select id="queryOneArticleByArticleId" resultMap="articleMap">
+        SELECT * FROM article WHERE articleid = #{articleid};
+    </select>
+
+    <select id="querySortBySortId" resultType="string">
+        SELECT speccategory FROM sort WHERE sortid = #{sortId};
+    </select>
+
+    <select id="queryWriterByAccountId" resultMap="userMap">
+        SELECT username,userimg FROM user WHERE accountid = #{accountId};
+    </select>
+
+    <update id="updateViewCount">
+        UPDATE article SET `viewcount` = #{viewcount} WHERE articleid = #{articleId};
+    </update>
+
+    <select id="queryAllArticleByPageOrderByViewCount" resultMap="articleMap" >
+        SELECT articleid,title FROM article ORDER BY viewcount DESC LIMIT #{pageNum},#{pageSize}
+    </select>
+
+    <select id="queryAllArticleByPageOrderByDate" resultMap="articleMap" >
+        SELECT articleid,title FROM article WHERE accountid=#{accountId} ORDER BY uploadtime DESC LIMIT #{pageNum},#{pageSize}
+    </select>
+
+    <select id="queryAllFollowArticleByPageOrderByDate" resultMap="articleMap" >
+        SELECT articleid,title FROM article JOIN follow ON befollowid=accountid WHERE whofollowid=#{whoFollowId} ORDER BY uploadtime DESC LIMIT #{pageNum},#{pageSize}
+    </select>
+
+    <select id="queryAllSortArticle" resultMap="articleMap">
+        SELECT articleid,title FROM article WHERE sortid = #{sortId} ORDER BY viewcount DESC LIMIT #{pageNum},#{pageSize}
+    </select>
+
+    <select id="queryArticleCount" resultType="int">
+        SELECT COUNT(*) FROM article
+        <where>
+            <if test="accountId != null">
+                accountid = #{accountId}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryFollowArticleCount" resultType="int">
+        SELECT COUNT(*) FROM follow JOIN article ON befollowid=accountid WHERE whofollowid=#{whoFollowId};
+    </select>
+
+    <select id="querySumViewCountByAccountId" resultType="int">
+        SELECT sum(viewcount) FROM article
+        <where>
+            <if test="accountId != null">
+                accountid = #{accountId}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryArticleCountBySortId" resultType="int">
+        SELECT COUNT(*) FROM article WHERE sortid = #{sortId};
+    </select>
+
+    <select id="getSortNameBySortId" resultType="java.util.HashMap">
+        SELECT category,speccategory FROM sort WHERE sortid = #{sortId};
+    </select>
+
+    <select id="queryAccountIdByArticleId" resultType="int">
+        SELECT accountid FROM article WHERE articleid = #{articleId};
+    </select>
+
+    <update id="deleteArticleByArticleId">
+        UPDATE article SET `accountid` = '-1',`content` = #{content} WHERE articleid = #{articleId};
+    </update>
+
+
+</mapper>

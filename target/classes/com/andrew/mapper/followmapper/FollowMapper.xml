@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.andrew.mapper.followmapper.FollowMapper">
+
+    <cache />
+
+    <resultMap id="getFollowInfoMap" type="User">
+        <result column="accountid" property="accountId"/>
+        <result column="username" property="username"/>
+        <result column="userimg" property="userImg"/>
+    </resultMap>
+
+
+    <select id="queryCountOfFollowing" resultType="int">
+        SELECT COUNT(*)FROM follow WHERE befollowid = #{accountId};
+    </select>
+
+    <select id="queryFollowExistByWhoFollowAndBeFollow" resultType="int">
+        SELECT COUNT(*) FROM `follow` WHERE befollowid=#{beFollowId} and whofollowid=#{whoFollowId};
+    </select>
+
+    <insert id="inserWhoFollowIdAndBeFollowId" useGeneratedKeys="true">
+        INSERT INTO follow(`befollowid`,`whofollowid`) VALUES (#{beFollowId},#{whoFollowId});
+    </insert>
+
+    <select id="getUserIdUserNameUserImgByWhoFollowId" resultMap="getFollowInfoMap">
+        SELECT accountid,username,userimg FROM follow join user on befollowid = accountid WHERE whofollowid=#{whoFollowId};
+    </select>
+
+    <delete id="deleteByBeFollowIdAndWhoFollowId">
+        DELETE FROM follow WHERE befollowid=#{beFollowId} and whofollowid=#{whoFollowId};
+    </delete>
+
+
+</mapper>
